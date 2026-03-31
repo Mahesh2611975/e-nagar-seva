@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f093fb, #f5576c);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #f5576c;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+<select name="role">
+    <option value="citizen">Citizen</option>
+    <option value="officer">Officer</option>
+</select>
+<div class="box">
+    <h2>Signup</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password1" placeholder="Password">
+        <input type="password" name="password2" placeholder="Confirm Password">
+
+        <button>Signup</button>
+
+        <select name="role" required>
+    <option value="">Select Role</option>
+    <option value="citizen">Citizen</option>
+    <option value="officer">Officer</option>
+</select>
+    </form>
+
+    <p><a href="/accounts/login/">Back to Login</a></p>
+</div>
+
+</body>
+</html>

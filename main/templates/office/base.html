@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-Nagar Seva</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+    body {
+        margin: 0;
+        font-family: Arial;
+        display: flex;
+        background: #f4f6f9;
+    }
+
+    /* 🔥 SIDEBAR */
+    .sidebar {
+        width: 230px;
+        height: 100vh;
+        background: #2c3e50;
+        color: white;
+        position: fixed;
+        overflow-y: auto;
+    }
+
+    .sidebar h2 {
+        text-align: center;
+        padding: 20px;
+        margin: 0;
+        background: #1a252f;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 15px 20px;
+        color: white;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+        background: #34495e;
+    }
+
+
+    .sidebar {
+    width: 240px;
+    background: #1f2937;
+    color: white;
+    height: 100vh;
+    padding-top: 20px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    color: #ddd;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: #374151;
+    color: white;
+}
+
+.menu-title {
+    padding: 10px 20px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+    /* 📄 MAIN */
+    .main {
+        margin-left: 230px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    /* 🌙 DARK MODE */
+    .dark {
+        background: #121212;
+        color: white;
+    }
+
+    .dark .sidebar {
+        background: #1f1f1f;
+    }
+
+    .dark .sidebar h2 {
+        background: #111;
+    }
+
+    .dark table {
+        background: #1e1e1e;
+        color: white;
+    }
+
+    /* 🔘 TOGGLE */
+    .toggle {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+    }
+
+    </style>
+</head>
+
+<body>
+
+<!-- 🔥 SIDEBAR -->
+<div class="sidebar">
+    <h2>⚒ E-Nagar</h2>
+
+    <a href="{% url 'staff_dashboard' %}">
+        <i class="fa fa-home"></i> Dashboard
+    </a>
+    <a href="{% url 'staff_dashboard' %}">  <i class="fa fa-list"></i>All Complaints</a>
+
+    <a href="{% url 'staff_dashboard' %}?status=pending"><i class="fa fa-clock"></i> Pending</a>
+
+    <a href="{% url 'staff_dashboard' %}?status=in_progress">🔧 In Progress</a>
+
+    <a href="{% url 'staff_dashboard' %}?status=resolved"><i class="fa fa-check-circle"></i> Completed</a>
+
+
+<a href="{% url 'logout' %}">
+        <i class="fa fa-sign-out"></i> Logout
+    </a>
+</div>
+
+<!-- 📄 MAIN -->
+<div class="main">
+
+    <!-- 🌙 DARK MODE -->
+    <div class="toggle">
+        🌙 <input type="checkbox" id="darkToggle">
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<!-- 🌙 DARK MODE SCRIPT -->
+<script>
+const toggle = document.getElementById("darkToggle");
+
+// Load saved mode
+if(localStorage.getItem("darkMode") === "on"){
+    document.body.classList.add("dark");
+    toggle.checked = true;
+}
+
+toggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+        localStorage.setItem("darkMode", "on");
+    } else {
+        localStorage.setItem("darkMode", "off");
+    }
+});
+</script>
+
+</body>
+</html>

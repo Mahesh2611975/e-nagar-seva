@@ -1,0 +1,116 @@
+{% extends 'office/base.html' %}
+{% block content %}
+
+<style>
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card {
+    flex: 1;
+    padding: 25px;
+    border-radius: 12px;
+    color: white;
+    text-align: center;
+}
+
+.blue { background: #36c2cf; }
+.orange { background: #f4a300; }
+.green { background: #2ecc71; }
+
+table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #4a90e2;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.btn {
+    background: green;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+}
+</style>
+
+<h2>🛠 Staff Dashboard</h2>
+
+<!-- CARDS -->
+<div class="cards">
+    <div class="card blue">Total<br><h2>{{ total }}</h2></div>
+    <div class="card orange">Pending<br><h2>{{ pending_count }}</h2></div>
+    <div class="card green">Completed<br><h2>{{ completed_count }}</h2></div>
+</div>
+
+<!-- TABLE -->
+<table>
+<tr>
+    <th>Image</th>
+    <th>Category</th>
+    <th>Status</th>
+    <th>Update</th>
+</tr>
+
+{% for c in complaints %}
+<tr>
+
+<td>
+    {% if c.image %}
+        <img src="{{ c.image.url }}" width="70">
+    {% endif %}
+</td>
+
+<td>{{ c.category|title }} Department</td>
+
+<td>
+    {% if c.status == "pending" %}
+        <span style="color:orange;">Pending</span>
+    {% elif c.status == "in_progress" %}
+        <span style="color:blue;">In Progress</span>
+    {% else %}
+        <span style="color:green;">Resolved</span>
+    {% endif %}
+</td>
+
+<td>
+<form method="POST" action="{% url 'update_status' c.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <select name="status">
+        <option value="pending">Pending</option>
+        <option value="in_progress">In Progress</option>
+        <option value="resolved">Completed</option>
+    </select>
+
+    <input type="file" name="completed_image">
+
+    <input type="text" name="remark" placeholder="Remark">
+
+    <button class="btn">Update</button>
+</form>
+</td>
+
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

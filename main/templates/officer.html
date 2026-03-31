@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Officer Dashboard</h2>
+
+{% for c in complaints %}
+<div>
+    <img src="{{ c.image.url }}" width="120"><br>
+    {{ c.category }} - {{ c.status }}
+
+    <form method="post" action="/update/{{c.id}}/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <select name="status">
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+        </select>
+        <input type="file" name="image">
+        <input type="text" name="desc" placeholder="Update">
+        <button>Update</button>
+    </form>
+</div>
+<hr>
+{% endfor %}
+
+{% endblock %}

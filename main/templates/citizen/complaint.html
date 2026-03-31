@@ -1,0 +1,214 @@
+{% extends 'citizen/base.html' %}
+{% block content %}
+
+<!-- 🌍 Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+.page {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.form-header {
+    background: linear-gradient(90deg, #4facfe, #3f51b5);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+}
+
+.form-card {
+    background: white;
+    padding: 25px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #4facfe, #3f51b5);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+}
+
+#preview {
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 8px;
+    display: none;
+}
+
+#map {
+    height: 300px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.location-btn {
+    background: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+</style>
+
+<div class="page">
+
+    <div class="form-header">
+        📄 Submit a Complaint
+    </div>
+
+    <div class="form-card">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Title -->
+            <div class="form-group">
+                <label>Complaint Topic</label>
+                <input type="text" name="title" placeholder="Eg: Water leakage near road">
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label>Complaint Description</label>
+                <textarea name="description" rows="4"
+                placeholder="Describe the issue in detail"></textarea>
+            </div>
+
+            <!-- Upload -->
+            <div class="form-group">
+                <label>Upload Photo</label>
+                <input type="file" name="image" id="imgInput">
+                <img id="preview">
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category">
+                <option value="road">Road</option>
+                <option value="water">Water</option>
+                <option value="electricity">Electricity</option>
+                <option value="garbage">Garbage</option>
+            </select>
+            </div>
+
+            <!-- 📍 BUTTON -->
+            <button type="button" class="location-btn" onclick="getLocation()">
+                📍 Get My Location
+            </button>
+
+            <!-- 🗺 MAP -->
+            <div id="map"></div>
+
+            <!-- 📍 ADDRESS -->
+            <p id="address" style="margin-top:10px; color:#555;"></p>
+
+            <!-- ✅ HIDDEN FIELDS -->
+            <input type="hidden" name="latitude" id="lat">
+            <input type="hidden" name="longitude" id="lng">
+            <input type="hidden" name="address" id="addressInput">
+
+            <!-- Submit -->
+            <button class="submit-btn">🚀 Submit Complaint</button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- 📸 IMAGE PREVIEW -->
+<script>
+document.getElementById("imgInput").onchange = function(e){
+    const file = e.target.files[0];
+    const preview = document.getElementById("preview");
+
+    if(file){
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    }
+}
+</script>
+
+<!-- 🗺 MAP -->
+<script>
+var map = L.map('map').setView([12.97, 77.59], 10);
+var marker;
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+function getLocation() {
+    navigator.geolocation.getCurrentPosition(
+        function(pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+
+            document.getElementById("lat").value = lat;
+            document.getElementById("lng").value = lng;
+
+            map.setView([lat, lng], 15);
+
+            if(marker) map.removeLayer(marker);
+
+            marker = L.marker([lat, lng]).addTo(map)
+                .bindPopup("📍 Your Location").openPopup();
+
+            getAddress(lat, lng);
+
+            alert("Location captured ✅");
+        },
+        function(error) {
+            alert("❌ ERROR: " + error.message);
+        }
+    );
+}
+</script>
+
+<!-- 🌍 ADDRESS FUNCTION -->
+<script>
+function getAddress(lat, lng) {
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("address").innerText =
+            "📍 " + data.display_name;
+
+        // ✅ SEND TO BACKEND
+        document.getElementById("addressInput").value =
+            data.display_name;
+    });
+}
+</script>
+
+{% endblock %}

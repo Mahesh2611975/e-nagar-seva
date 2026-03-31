@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Citizen Signup</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f5f7fb;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            height: 90vh;
+        }
+
+        .side {
+            width: 30%;
+        }
+
+        .left {
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+        }
+
+        .right {
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .box {
+            width: 350px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 10px;
+            top: 12px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 12px 12px 35px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <i class="fa-solid fa-building"></i> E-NAGAR SEVA
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="side left"></div>
+
+    <div class="box">
+
+        <h2>Create Account</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-box">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="username" placeholder="Full Name">
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email">
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="confirm" placeholder="Confirm Password">
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+
+    </div>
+
+    <div class="side right"></div>
+
+</div>
+
+</body>
+</html>
