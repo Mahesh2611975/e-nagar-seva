@@ -69,8 +69,3 @@ python manage.py runserver
 Mahesh Yadav
 GitHub: https://github.com/mahesh2611975/e-nagar-seva
 
----
-
-## ⭐ Show Support
-
-Give a ⭐ if you like this project!
